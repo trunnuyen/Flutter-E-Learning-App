@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/color.dart';
@@ -47,11 +48,16 @@ class FeatureCard extends StatelessWidget {
                   height: 160,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      data["image"],
-                      fit: BoxFit.fill,
-                      width: double.infinity,
-                    ),
+                    child: CachedNetworkImage(
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.cover
+                          ),
+                        ),
+                      ),
+                      imageUrl: data["image"],),
                   ),
                 ),
                 Container(

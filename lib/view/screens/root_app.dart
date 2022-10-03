@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_learning_app/view/screens/profile.dart';
 import 'package:online_learning_app/view/theme/color.dart';
 import '../widgets/bottom_bar_item.dart';
 import 'explore.dart';
@@ -13,6 +14,7 @@ class RootApp extends StatefulWidget {
 
 class _RootAppState extends State<RootApp> {
   int activePageIndex = 0;
+
   final PageController _pageController = PageController();
 
   List tabItems = [
@@ -28,7 +30,7 @@ class _RootAppState extends State<RootApp> {
     },
     {
       "icon": "assets/icons/profile.svg",
-      "page": Container(child: Center(child: Text("Profile")))
+      "page": const ProfilePage(),
     },
   ];
 

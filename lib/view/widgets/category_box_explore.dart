@@ -29,7 +29,7 @@ class ExploreCategory extends StatelessWidget {
                 color: shadowColor.withOpacity(.1),
                 blurRadius: .5,
                 spreadRadius: .5,
-                offset: Offset(1, 1),
+                offset: const Offset(1, 1),
               ),
             ],
           ),

@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+var profile = {
+  "name": "Lmao",
+  "image": "https://avatars.githubusercontent.com/u/94124755?v=4",
+  "email": "trng1907@gmail.com"
+};
+
+
 List categories = [
   {"name": "All", "icon": "assets/icons/category/all.svg"},
   {"name": "Coding", "icon": "assets/icons/category/coding.svg"},
