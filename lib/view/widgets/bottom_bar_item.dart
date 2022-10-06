@@ -16,13 +16,16 @@ class BottomBarItem extends StatelessWidget {
       this.activeColor = primary,
       this.defaultColor = blue,
       this.isActive = false,
-      this.onTap}) : super(key: key);
+      this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.bounceIn,
         padding: const EdgeInsets.all(7),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),

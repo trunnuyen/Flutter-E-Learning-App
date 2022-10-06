@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:online_learning_app/view/widgets/course_explore_card.dart';
 import 'package:online_learning_app/view/widgets/search_box.dart';
 
 import '../theme/color.dart';
 import '../utils/data.dart';
-import '../utils/persistent_header.dart';
 import '../widgets/category_box_explore.dart';
 
 class ExplorePage extends StatefulWidget {
@@ -84,42 +85,11 @@ class _ExplorePageState extends State<ExplorePage> {
 
   getCourses() {
     return SliverChildBuilderDelegate((context, index) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
-        child: Container(
-          width: 200,
-          height: 290,
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.symmetric(vertical: 5),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: shadowColor.withOpacity(.1),
-                  blurRadius: 1,
-                  spreadRadius: 1,
-                  offset: const Offset(1, 1),
-                ),
-              ]),
-          child: Stack(children: [
-            Container(
-              width: double.infinity,
-              height: 190,
-              child: CachedNetworkImage(
-                imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                        image: imageProvider, fit: BoxFit.cover),
-                  ),
-                ),
-                imageUrl: features[0]["image"],
-              ),
-            ),
-          ]),
-        ),
-      );
+      return CourseExploreCard(
+          data: courses[index],
+          onTap: () {
+            onTapBookmark(index);
+          });
     });
   }
 
@@ -127,5 +97,17 @@ class _ExplorePageState extends State<ExplorePage> {
     setState(() {
       activeCategoryIndex = index;
     });
+  }
+
+  onTapBookmark(index) {
+    if (!courses[index]["is_favorited"]) {
+      setState(() {
+        courses[index]["is_favorited"] = true;
+      });
+    } else {
+      setState(() {
+        courses[index]["is_favorited"] = false;
+      });
+    }
   }
 }

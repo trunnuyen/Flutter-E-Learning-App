@@ -19,7 +19,9 @@ class ExploreCategory extends StatelessWidget {
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(5),
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds:100),
+          curve: Curves.linear,
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: isActive ? primary : Colors.white,
