@@ -84,13 +84,19 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   getCourses() {
-    return SliverChildBuilderDelegate((context, index) {
-      return CourseExploreCard(
-          data: courses[index],
-          onTap: () {
-            onTapBookmark(index);
-          });
-    });
+    return SliverChildBuilderDelegate(
+      (
+        context,
+        index,
+      ) {
+        return CourseExploreCard(
+            data: courses[index],
+            onTap: () {
+              onTapBookmark(index);
+            });
+      },
+      childCount: courses.length,
+    );
   }
 
   onCategoryIndexChange(index) {
@@ -100,14 +106,8 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   onTapBookmark(index) {
-    if (!courses[index]["is_favorited"]) {
-      setState(() {
-        courses[index]["is_favorited"] = true;
-      });
-    } else {
-      setState(() {
-        courses[index]["is_favorited"] = false;
-      });
-    }
+    setState(() {
+      courses[index]["is_favorited"] = !courses[index]["is_favorited"];
+    });
   }
 }

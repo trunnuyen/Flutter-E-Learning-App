@@ -106,14 +106,14 @@ class _LoginState extends State<Login> {
                                 fontSize: 15,
                               ),
                             )),
-                         InkWell(
-                          onTap:(){
+                        InkWell(
+                          onTap: () {
                             setState(() {
                               _passVisibility = !_passVisibility;
                             });
                           },
                           child: Text(
-                            _passVisibility?'SHOW': 'HIDE',
+                            _passVisibility ? 'SHOW' : 'HIDE',
                             style: const TextStyle(
                                 color: Colors.blueAccent,
                                 fontSize: 13,
