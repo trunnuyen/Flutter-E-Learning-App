@@ -3,6 +3,7 @@ import 'package:online_learning_app/view/screens/profile/profile.dart';
 import 'package:online_learning_app/view/theme/color.dart';
 import '../widgets/bottom_bar_item.dart';
 import 'explore/explore.dart';
+import 'forum/forum.dart';
 import 'home/home.dart';
 import 'my_courses/my_courses.dart';
 
@@ -27,7 +28,7 @@ class _RootAppState extends State<RootApp> {
     },
     {
       "icon": "assets/icons/chat.svg",
-      "page": Container(child: Center(child: Text("Chat")))
+      "page": const ForumPage(),
     },
     {
       "icon": "assets/icons/profile.svg",
