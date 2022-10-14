@@ -2,12 +2,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:online_learning_app/view/theme/color.dart';
 import 'package:online_learning_app/view/utils/data.dart';
-import 'package:online_learning_app/view/widgets/course_featured_card.dart';
+import 'package:online_learning_app/view/screens/home/components/course_featured_card.dart';
 import 'package:online_learning_app/view/widgets/course_recommend_card.dart';
-import 'package:online_learning_app/view/widgets/greeting_icon_box.dart';
+import 'package:online_learning_app/view/screens/home/components/greeting_icon_box.dart';
 import 'package:online_learning_app/view/widgets/notification_box.dart';
 
-import '../widgets/category_box.dart';
+import '../../widgets/recommend_courses.dart';
+import 'components/category_box.dart';
+import '../course_detail/course_detail.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -74,26 +76,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         getFeatured(),
-        const Padding(
-          padding: EdgeInsets.fromLTRB(15, 15, 15, 10),
-          child: Text(
-            "Recommend",
-            style: TextStyle(
-              color: textColor,
-              fontWeight: FontWeight.w600,
-              fontSize: 22,
-            ),
-          ),
-        ),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: List.generate(
-              features.length,
-              (index) => CourseRecommend(data: features[index]),
-            ),
-          ),
-        ),
+        RecommendCourses(data: features),
       ]),
     );
   }
@@ -190,7 +173,12 @@ class _HomePageState extends State<HomePage> {
     return CarouselSlider(
       items: List.generate(
         features.length,
-        (index) => FeatureCard(data: features[index]),
+        (index) => GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => CourseDetailPage(data: courses[index])));
+            },
+            child: FeatureCard(data: features[index])),
       ),
       options: CarouselOptions(
         height: 290,

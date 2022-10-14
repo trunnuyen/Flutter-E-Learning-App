@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../theme/color.dart';
-import 'bookmark_box.dart';
+import '../../../theme/color.dart';
+import '../../../widgets/bookmark_box.dart';
 
 class CourseExploreCard extends StatelessWidget {
   final data;
@@ -53,7 +53,7 @@ class CourseExploreCard extends StatelessWidget {
                     isBookmarked: data["is_favorited"], onTap: onTap),
               ),
             ]),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Container(

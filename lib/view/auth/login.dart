@@ -4,7 +4,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:online_learning_app/view/auth/register.dart';
 import 'package:online_learning_app/view/screens/root_app.dart';
-import '../dashboard.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:online_learning_app/view/screens/profile.dart';
+import 'package:online_learning_app/view/screens/profile/profile.dart';
 import 'package:online_learning_app/view/theme/color.dart';
 import '../widgets/bottom_bar_item.dart';
-import 'explore.dart';
-import 'home.dart';
+import 'explore/explore.dart';
+import 'home/home.dart';
+import 'my_courses/my_courses.dart';
 
 class RootApp extends StatefulWidget {
   const RootApp({super.key});
@@ -22,7 +23,7 @@ class _RootAppState extends State<RootApp> {
     {"icon": "assets/icons/search.svg", "page": const ExplorePage()},
     {
       "icon": "assets/icons/play.svg",
-      "page": Container(child: Center(child: Text("Play")))
+      "page": const MyCoursesPage(),
     },
     {
       "icon": "assets/icons/chat.svg",

@@ -1,12 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:online_learning_app/view/widgets/course_explore_card.dart';
+import 'package:online_learning_app/view/screens/explore/components/course_explore_card.dart';
 import 'package:online_learning_app/view/widgets/search_box.dart';
 
-import '../theme/color.dart';
-import '../utils/data.dart';
-import '../widgets/category_box_explore.dart';
+import '../../theme/color.dart';
+import '../../utils/data.dart';
+import '../../widgets/category_box_explore.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -51,18 +49,6 @@ class _ExplorePageState extends State<ExplorePage> {
       ),
     );
   }
-
-  // Widget buildBody() {
-  //   return SingleChildScrollView(
-  //     child: Column(
-  //       children: [
-  //         const SearchBox(),
-  //         getCategories(),
-  //         getCourses(),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget getCategories() {
     return SingleChildScrollView(
