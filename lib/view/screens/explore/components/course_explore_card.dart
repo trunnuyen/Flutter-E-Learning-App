@@ -20,7 +20,7 @@ class CourseExploreCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 5),
         decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(6),
             boxShadow: [
               BoxShadow(
                 color: shadowColor.withOpacity(.1),
@@ -38,7 +38,7 @@ class CourseExploreCard extends StatelessWidget {
                 child: CachedNetworkImage(
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(6),
                       image: DecorationImage(
                           image: imageProvider, fit: BoxFit.cover),
                     ),

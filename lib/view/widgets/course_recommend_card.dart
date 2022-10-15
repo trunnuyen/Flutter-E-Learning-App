@@ -15,7 +15,7 @@ class CourseRecommend extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(6),
           boxShadow: [
             BoxShadow(
               color: shadowColor.withOpacity(.1),
@@ -31,11 +31,11 @@ class CourseRecommend extends StatelessWidget {
               width: 80,
               height: 80,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(6),
                 child: CachedNetworkImage(
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(6),
                       image: DecorationImage(
                           image: imageProvider, fit: BoxFit.cover),
                     ),

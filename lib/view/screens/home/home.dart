@@ -7,6 +7,7 @@ import 'package:online_learning_app/view/widgets/course_recommend_card.dart';
 import 'package:online_learning_app/view/screens/home/components/greeting_icon_box.dart';
 import 'package:online_learning_app/view/widgets/notification_box.dart';
 
+import '../../widgets/circle_avatar.dart';
 import '../../widgets/recommend_courses.dart';
 import 'components/category_box.dart';
 import '../course_detail/course_detail.dart';
@@ -99,23 +100,7 @@ class _HomePageState extends State<HomePage> {
       ),
       child: Row(children: [
         Flexible(
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.blue.withOpacity(.3),
-              ),
-            ),
-            child: ClipOval(
-              child: SizedBox.fromSize(
-                size: const Size.fromRadius(20),
-                child: Image.asset(
-                  "assets/images/cat.jpg",
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
+          child: Avatar(imgUrl: 'assets/images/cat.jpg'),
         ),
         const SizedBox(
           width: 10,

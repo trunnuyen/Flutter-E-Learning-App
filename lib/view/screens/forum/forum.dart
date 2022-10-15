@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../theme/color.dart';
 import '../../utils/data.dart';
 import '../../widgets/category_box_explore.dart';
+import 'components/post_card.dart';
 
 class ForumPage extends StatefulWidget {
   const ForumPage({super.key});
@@ -37,6 +38,12 @@ class _ForumPageState extends State<ForumPage> {
           ),
           SliverToBoxAdapter(
             child: getCategories(),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => PostContainer(data: posts[index]),
+              childCount: posts.length,
+            ),
           ),
         ],
       ),

@@ -105,7 +105,7 @@ class _MyCoursesPageState extends State<MyCoursesPage>
         margin: const EdgeInsets.symmetric(vertical: 5),
         decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(6),
             boxShadow: [
               BoxShadow(
                 color: shadowColor.withOpacity(.07),

@@ -25,7 +25,7 @@ class FeatureCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 5, top: 5),
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(6),
           boxShadow: [
             BoxShadow(
               color: shadowColor.withOpacity(.1),
@@ -42,16 +42,16 @@ class FeatureCard extends StatelessWidget {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(6),
                   ),
-                  margin: const EdgeInsets.all(5),
+                  // margin: const EdgeInsets.all(5),
                   height: 160,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(6),
                     child: CachedNetworkImage(
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(6),
                           image: DecorationImage(
                             image: imageProvider, fit: BoxFit.cover
                           ),
