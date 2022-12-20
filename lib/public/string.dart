@@ -1,0 +1,1 @@
+String freeCourse = 'Free';

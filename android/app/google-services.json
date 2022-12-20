@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "771703545481",
+    "project_id": "online-course-app-trng",
+    "storage_bucket": "online-course-app-trng.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771703545481:android:46703888428adbcc6a7058",
+        "android_client_info": {
+          "package_name": "com.example.online_learning_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "771703545481-u92nl18umkiu8m8sb9td2rri6ob17a0k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZlYRl8z7A5DA99-DGjq2gykq9N5GSJHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "771703545481-u92nl18umkiu8m8sb9td2rri6ob17a0k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
