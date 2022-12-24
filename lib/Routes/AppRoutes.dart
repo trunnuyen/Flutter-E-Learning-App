@@ -6,4 +6,5 @@ class AppRoutes {
   static String WishList = "/wishlist";
   static String ViewNotifications = "/notifications";
   static String Profile = "/profile";
+  static String Splash = "/splash";
 }

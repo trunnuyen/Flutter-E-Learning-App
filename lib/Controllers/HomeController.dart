@@ -1,7 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:online_learning_app/Controllers/CategoryController.dart';
 import 'package:online_learning_app/Controllers/CourseController.dart';
+import 'package:online_learning_app/Controllers/EnrollController.dart';
+import 'package:online_learning_app/Controllers/LessonController.dart';
 import 'package:online_learning_app/Controllers/UserController.dart';
 import 'package:online_learning_app/ListItems/CourseCard.dart';
 import 'package:online_learning_app/ListItems/CourseItem.dart';
@@ -12,7 +13,9 @@ import 'package:get/get.dart';
 import '../Repository/DBHelper.dart';
 
 CourseController courseController = Get.put(CourseController());
-
+UserController usercontroller = Get.put(UserController());
+LessonController lessonsController = Get.put(LessonController());
+EnrollController enrollController = Get.put(EnrollController());
 
 class HomeController extends GetxController {
   var selectedButton = "All Courses".obs;
@@ -79,60 +82,61 @@ class HomeController extends GetxController {
           );
         });
 
-      // default:
-      //   return StreamBuilder(
-      //     stream: DBHelper.db
-      //         .collection("Course")
-      //         .orderBy("key", descending: true)
-      //         .snapshots(),
-      //     builder: (BuildContext context,
-      //         AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-      //       if (snapshot.hasData) {
-      //         var arr = snapshot.data!.docs;
-      //         print(arr[1]);
-      //         return ListView.builder(
-      //           itemCount: arr.length,
-      //           itemBuilder: (BuildContext context, int index) {
-      //             return CourseItem(snap: arr[index]);
-      //           },
-      //         );
-      //       }
-      //       return Center(child: CircularProgressIndicator());
-      //     },
-      //   );
+      case "Free":
+        return Obx(() {
+          if (courseController.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (courseController.freeCourse == null) {
+            return Image.asset("assets/images/notfound.png");
+          }
+          return CarouselSlider(
+            items: List.generate(
+              courseController.freeCourse?.courses?.length ?? 0,
+              (index) => CourseCard(
+                course: courseController.freeCourse!.courses![index],
+              ),
+            ),
+            options: CarouselOptions(
+              height: 290,
+              enlargeCenterPage: true,
+              disableCenter: true,
+              autoPlay: true,
+            ),
+          );
+        });
     }
   }
 
   dynamic getMyCoursesList(String selected) {
     switch (selected) {
       case "All Courses":
-        return StreamBuilder(
-          stream: DBHelper.db
-              .collection("Enrolled")
-              .where("userkey", isEqualTo: DBHelper.auth.currentUser!.uid)
-              .snapshots(),
-          builder: (BuildContext context,
-              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-            if (snapshot.hasData) {
-              var arr = snapshot.data!.docs;
-              if (arr.isEmpty) {
-                return Center(
-                  child: Text("No Courses Enrolled"),
-                );
-              }
-              return ListView.builder(
-                itemCount: arr.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ProgressCourseItem(
-                      coursekey: arr[index].get("coursekey"));
-                },
-              );
-            }
-            return Center(
+        return Obx(() {
+          if (enrollController.isLoading.value) {
+            return const Center(
               child: CircularProgressIndicator(),
             );
-          },
-        );
+          }
+          if (enrollController.enrollProvider == null) {
+            return Image.asset("assets/images/notfound.png");
+          }
+          return ListView.builder(
+            itemCount: enrollController.enrollProvider!.enrolls!.length,
+            itemBuilder: (BuildContext context, int index) {
+              return EnrollCourseItem(
+                course: courseController.courseProvider!.courses!
+                    .where((course) =>
+                        course.key ==
+                        enrollController
+                            .enrollProvider!.enrolls![index].coursekey)
+                    .toList()[0],
+              );
+            },
+          );
+        });
+
       case "On Progress":
         return StreamBuilder(
           stream: DBHelper.db
@@ -144,7 +148,7 @@ class HomeController extends GetxController {
             if (snapshot.hasData) {
               var arr = snapshot.data!.docs;
               if (arr.isEmpty) {
-                return Center(
+                return const Center(
                   child: Text("No Courses in Progress"),
                 );
               }
@@ -167,17 +171,17 @@ class HomeController extends GetxController {
                     return ListView.builder(
                       itemCount: items.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return ProgressCourseItem(coursekey: items[index]);
+                        return SizedBox();
                       },
                     );
                   }
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 },
               );
             }
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           },
@@ -193,7 +197,7 @@ class HomeController extends GetxController {
             if (snapshot.hasData) {
               var arr = snapshot.data!.docs;
               if (arr.isEmpty) {
-                return Center(
+                return const Center(
                   child: Text(
                     "No Courses Completed !",
                     style: TextStyle(fontSize: 18),
@@ -203,12 +207,11 @@ class HomeController extends GetxController {
               return ListView.builder(
                 itemCount: arr.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return ProgressCourseItem(
-                      coursekey: arr[index].get("coursekey"));
+                  return SizedBox();
                 },
               );
             }
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           },

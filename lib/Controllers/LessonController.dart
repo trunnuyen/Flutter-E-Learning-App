@@ -1,45 +1,38 @@
-// import 'dart:convert';
+import 'dart:convert';
 
-// import 'package:get/get.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:online_learning_app/Models/LessonsList.dart';
-// import 'package:online_learning_app/Views/utils/api.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:online_learning_app/public/api.dart';
 
-// import '../Models/CoursesList.dart';
+import '../Provider/LessonsProvider.dart';
 
-// class LessonController extends GetxController {
-//   var isLoading = false.obs;
-//   LessonsModel? lessonModel;
+class LessonController extends GetxController {
+  var isLoading = false.obs;
+  LessonsProvider? lessonsProvider;
 
-//   @override
-//   Future<void> onInit() async {
-//     super.onInit();
-//   }
+  @override
+  Future<void> onInit() async {
+    super.onInit();
+  }
 
-//   fetchData(String course_id) async {
-//     try {
-//       isLoading(true);
-//       http.Response response = await http.get(Uri.tryParse(
-//           '$baseApi/online_learning_api/api/LessonAPI.php?course_id=$course_id')!);
-//       print(
-//           '$baseApi/online_learning_api/api/LessonAPI.php?course_id=$course_id');
-//       if (response.statusCode == 200) {
-//         ///data successfully
-//         var result = jsonDecode(response.body);
+  fetchData(String courseId) async {
+    try {
+      isLoading(true);
+      http.Response response = await http.get(Uri.tryParse(
+          '$baseApi/online_learning_api/api/LessonAPI.php?course_id=$courseId')!);
+      if (response.statusCode == 200) {
+        ///data successfully
+        var result = jsonDecode(response.body);
 
-//         lessonModel = LessonsModel.fromJson(result);
-//         print(' fetching data                    $result');
-//       } else {
-//         lessonModel = [] as LessonsModel?;
-//         print(
-//             'error fetching dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ${lessonModel!.lesson!.length}');
-//       }
-//     } catch (e) {
-//       print('Error while getting data is $e');
-//     } finally {
-//       print(
-//           '$baseApi/online_learning_api/api/LessonAPI.php?course_id=$course_id');
-//       isLoading(false);
-//     }
-//   }
-// }
+        lessonsProvider = LessonsProvider.fromJson(result);
+        print(' fetching data $result');
+      } else {
+        print('error fetching data');
+      }
+    } catch (e) {
+      print('Error while getting data is $e');
+    } finally {
+      isLoading(false);
+    }
+  }
+}

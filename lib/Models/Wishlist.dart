@@ -2,7 +2,7 @@ import 'package:online_learning_app/Repository/DBHelper.dart';
 
 class Wishlist {
   String userkey = DBHelper.auth.currentUser!.uid;
-  List<dynamic> coursekey = [];
+  String coursekey = "";
 
 //<editor-fold desc="Data Methods">
 
@@ -28,7 +28,7 @@ class Wishlist {
 
   Wishlist copyWith({
     String? userkey,
-    List? coursekey,
+    String? coursekey,
   }) {
     return Wishlist(
       coursekey: coursekey!,
@@ -44,7 +44,7 @@ class Wishlist {
 
   factory Wishlist.fromMap(Map<String, dynamic> map) {
     return Wishlist(
-      coursekey: map['coursekey'] as List,
+      coursekey: map['coursekey'],
     );
   }
 

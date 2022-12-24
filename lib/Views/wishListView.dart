@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:online_learning_app/Controllers/UserController.dart';
+import 'package:online_learning_app/Controllers/HomeController.dart';
 import 'package:online_learning_app/ListItems/CourseItem.dart';
 import 'package:online_learning_app/Repository/DBHelper.dart';
 import 'package:online_learning_app/Widgets/BackBtn.dart';
 import 'package:flutter/material.dart';
 
+var controller = Get.find<HomeController>();
+
 class wishListView extends StatelessWidget {
   wishListView({Key? key}) : super(key: key);
-  UserController usercontroller = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -20,34 +21,40 @@ class wishListView extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-      body: RefreshIndicator(
-        onRefresh: _refresh,
-        child: Obx(
-          () {
-            if (usercontroller.isLoading.value) {
+      body: StreamBuilder(
+        stream: DBHelper.db
+            .collection("Wishlist")
+            .where("userkey", isEqualTo: DBHelper.auth.currentUser!.uid)
+            .snapshots(),
+        builder: (BuildContext context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.hasData) {
+            var arr = snapshot.data!.docs;
+            if (arr.isEmpty) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: Text(
+                  "No Favourites Yet !",
+                  style: TextStyle(fontSize: 20),
+                ),
               );
             }
-            if (usercontroller.coursesWishlist.isEmpty) {
-              return Image.asset("assets/images/notfound.png");
-            }
             return ListView.builder(
-              itemCount: usercontroller.coursesWishlist.length,
+              itemCount: arr.length,
               itemBuilder: (BuildContext context, int index) {
                 return CourseItem(
-                  course: usercontroller.coursesWishlist.toList()[index],
+                  course: courseController.courseProvider!.courses!
+                      .where(
+                          (course) => course.key == arr[index].get("coursekey"))
+                      .toList()[0],
                 );
               },
             );
-          },
-        ),
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
-  }
-
-  Future<void> _refresh() {
-    usercontroller.fetchData();
-    return Future.delayed(const Duration(seconds: 3));
   }
 }

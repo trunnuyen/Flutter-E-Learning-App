@@ -77,7 +77,7 @@ class Users {
   }
 
   Users.fromJson(Map<String, dynamic> json) {
-    sqlId = json["id"];
+    sqlId = json["id"] as String;
     key = json["firebase_id"];
     wishlist = json["wishlist"];
   }

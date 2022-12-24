@@ -3,3 +3,5 @@ String defaultCourseThumbnail =
 
 String defaultCategoryThumbnail =
     'https://pics.freeicons.io/uploads/icons/png/12418923441555931396-512.png';
+
+String defaultSplashAnimated = 'assets/json/splashanimation.json';

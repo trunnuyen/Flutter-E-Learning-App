@@ -1,10 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_learning_app/Controllers/HomeController.dart';
+import 'package:online_learning_app/Controllers/LessonController.dart';
+import 'package:online_learning_app/Repository/DBHelper.dart';
 import 'package:online_learning_app/Views/ViewCourse.dart';
 import 'package:online_learning_app/Models/Course.dart';
 import 'package:online_learning_app/public/color.dart';
 import 'package:online_learning_app/public/default.dart';
+
+var lessonsController = Get.put(LessonController());
 
 class CourseCard extends StatelessWidget {
   const CourseCard(
@@ -21,8 +27,10 @@ class CourseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    lessonsController.fetchData(course.key!);
     return InkWell(
       onTap: () {
+        enrollController.getTotalEnroll(course.key!);
         Get.to(ViewCourse(course: course));
       },
       child: Container(
@@ -78,9 +86,39 @@ class CourseCard extends StatelessWidget {
                     child: Center(
                       child: Text(
                         course.price! == '0' ? 'Free' : '${course.price!}\$',
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.white),
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            decoration: course.discountedPrice == '0'
+                                ? TextDecoration.none
+                                : TextDecoration.lineThrough),
                       ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    margin: const EdgeInsets.fromLTRB(160, 10, 20, 145),
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: course.discountedPrice == '0'
+                          ? Colors.transparent
+                          : Colors.red,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          overflow: TextOverflow.ellipsis,
+                          course.discountedPrice == '0'
+                              ? ''
+                              : '${course.discountedPrice}\$',
+                          style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -108,12 +146,11 @@ class CourseCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
-                      children: [
-                        const Icon(Icons.access_time_outlined,
-                            size: 15, color: Colors.grey),
+                      children: const [
+                        Icon(Icons.timelapse, size: 15, color: Colors.grey),
                         Text(
-                          'time',
-                          style: const TextStyle(color: Colors.grey),
+                          'Lifetime',
+                          style: TextStyle(color: Colors.grey),
                         ),
                       ],
                     ),
@@ -121,13 +158,41 @@ class CourseCard extends StatelessWidget {
                       children: [
                         const Icon(Icons.play_circle,
                             size: 15, color: Colors.grey),
-                        Text('play'),
+                        Text(lessonsController.lessonsProvider == null
+                            ? '0'
+                            : lessonsController.lessonsProvider!.lessons!.length
+                                .toString()),
                       ],
                     ),
                     Row(
                       children: [
                         const Icon(Icons.star, size: 15, color: Colors.yellow),
-                        Text('star'),
+                        StreamBuilder(
+                          stream: DBHelper.db
+                              .collection("Rating")
+                              .where("coursekey", isEqualTo: course.key!)
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                                  snapshot) {
+                            if (snapshot.hasData) {
+                              var arr = snapshot.data!.docs;
+                              var avg = 0.0;
+                              if (arr.isNotEmpty) {
+                                avg = arr
+                                        .map((e) => double.parse(
+                                            e.get("rating").toString()))
+                                        .reduce((a, b) => a + b) /
+                                    arr.length;
+                              }
+                              return Text(
+                                avg.toStringAsFixed(1),
+                                style: TextStyle(color: Colors.blue.shade700),
+                              );
+                            }
+                            return const SizedBox();
+                          },
+                        ),
                       ],
                     ),
                   ],

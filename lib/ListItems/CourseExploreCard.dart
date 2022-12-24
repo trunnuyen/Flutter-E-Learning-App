@@ -1,17 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_learning_app/Controllers/HomeController.dart';
 import 'package:online_learning_app/Controllers/UserController.dart';
 import 'package:online_learning_app/Models/Course.dart';
+import 'package:online_learning_app/Models/Wishlist.dart';
+import 'package:online_learning_app/Repository/DBHelper.dart';
 import 'package:online_learning_app/public/color.dart';
 import 'package:online_learning_app/public/default.dart';
+
+var _controller = Get.find<HomeController>();
 
 class CourseExploreCard extends StatelessWidget {
   final Course course;
 
   CourseExploreCard({super.key, required this.course});
-
-  UserController usercontroller = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,36 +57,79 @@ class CourseExploreCard extends StatelessWidget {
               Positioned(
                 top: 150,
                 right: 5,
-                child: Obx(
-                  () => usercontroller.coursesWishlistId
-                          .contains(int.parse(course.key!))
-                      ? InkWell(
+                child: StreamBuilder(
+                  stream: DBHelper.db
+                      .collection("Wishlist")
+                      .where("coursekey", isEqualTo: course.key)
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.hasData) {
+                      var arr = snapshot.data!.docs
+                          .where((e) =>
+                              e.get("userkey") ==
+                              DBHelper.auth.currentUser!.uid)
+                          .toList();
+                      if (arr.isEmpty) {
+                        return InkWell(
                           onTap: () async {
-                            // wishlist = list.map((id) => '\"$id\"').toList();
-                            // wishlist.add('\"${course.key}\"');
-                            usercontroller.coursesWishlistId
-                                .add(int.parse(course.key!));
-                            usercontroller.saveToWishlist(
-                                usercontroller.coursesWishlistId);
-
-                            print(usercontroller.coursesWishlistId.toString());
-                            print(usercontroller.coursesWishlistId.length);
+                            await DBHelper.db
+                                .collection("Wishlist")
+                                .add(Wishlist(coursekey: course.key!).toMap());
+                            Get.snackbar(
+                              "Success",
+                              "Course ${course.name} Added to wishlist",
+                              icon: const Icon(Icons.favorite,
+                                  color: Colors.blue),
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
                           },
-                          child: const Icon(Icons.favorite))
-                      : InkWell(
-                          onTap: () async {
-                            usercontroller.coursesWishlistId
-                                .remove(int.parse(course.key!));
-                            usercontroller.coursesWishlist.remove(course);
-                            // wishlist = list.map((id) => '\"$id\"').toList();
-                            usercontroller.saveToWishlist(
-                                usercontroller.coursesWishlistId);
-                          },
-                          child: Icon(
-                            Icons.favorite,
-                            color: Colors.blue.shade700,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                                color: Colors.white, shape: BoxShape.circle),
+                            child: const Center(
+                              child: Icon(
+                                Icons.favorite,
+                              ),
+                            ),
                           ),
+                        );
+                      } else {
+                        return InkWell(
+                          onTap: () async {
+                            await arr[0].reference.delete();
+                            Get.snackbar(
+                              "Success",
+                              "Course ${course.name} Removed from wishlist",
+                              icon: const Icon(Icons.heart_broken,
+                                  color: Colors.blue),
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                                color: primary, shape: BoxShape.circle),
+                            child: Center(
+                              child: Icon(
+                                Icons.favorite,
+                                color: Colors.blue.shade700,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                    return Container(
+                      decoration: const BoxDecoration(
+                          color: Colors.white, shape: BoxShape.circle),
+                      child: const Center(
+                        child: Icon(
+                          Icons.favorite,
                         ),
+                      ),
+                    );
+                  },
                 ),
               ),
               Container(
@@ -151,12 +198,12 @@ class CourseExploreCard extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: [
-                        const Icon(Icons.access_time_outlined,
+                      children: const [
+                        Icon(Icons.access_time_outlined,
                             size: 15, color: Colors.grey),
                         Text(
-                          "duration",
-                          style: const TextStyle(color: Colors.grey),
+                          "Lifetime",
+                          style: TextStyle(color: Colors.grey),
                         ),
                       ],
                     ),
@@ -164,13 +211,41 @@ class CourseExploreCard extends StatelessWidget {
                       children: [
                         const Icon(Icons.play_circle,
                             size: 15, color: Colors.grey),
-                        Text("session"),
+                        Text(lessonsController.lessonsProvider == null
+                            ? '0'
+                            : lessonsController.lessonsProvider!.lessons!.length
+                                .toString()),
                       ],
                     ),
                     Row(
                       children: [
                         const Icon(Icons.star, size: 15, color: Colors.yellow),
-                        Text("review"),
+                        StreamBuilder(
+                          stream: DBHelper.db
+                              .collection("Rating")
+                              .where("coursekey", isEqualTo: course.key!)
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                                  snapshot) {
+                            if (snapshot.hasData) {
+                              var arr = snapshot.data!.docs;
+                              var avg = 0.0;
+                              if (arr.isNotEmpty) {
+                                avg = arr
+                                        .map((e) => double.parse(
+                                            e.get("rating").toString()))
+                                        .reduce((a, b) => a + b) /
+                                    arr.length;
+                              }
+                              return Text(
+                                avg.toStringAsFixed(1),
+                                style: TextStyle(color: Colors.blue.shade700),
+                              );
+                            }
+                            return const SizedBox();
+                          },
+                        ),
                       ],
                     ),
                   ],

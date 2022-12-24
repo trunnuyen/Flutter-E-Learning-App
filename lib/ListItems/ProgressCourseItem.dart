@@ -1,151 +1,111 @@
+// ignore_for_file: unnecessary_string_escapes
+
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:online_learning_app/Bindings/UserBinding.dart';
+import 'package:online_learning_app/Controllers/UserController.dart';
+import 'package:online_learning_app/Models/Course.dart';
+import 'package:online_learning_app/Models/Wishlist.dart';
 import 'package:online_learning_app/Views/FullCourse.dart';
+import 'package:online_learning_app/Views/ViewCourse.dart';
+import 'package:online_learning_app/public/default.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
-
 import '../Repository/DBHelper.dart';
-import '../Views/ViewCourse.dart';
 
-class ProgressCourseItem extends StatelessWidget {
-  String coursekey;
+class EnrollCourseItem extends StatelessWidget {
+  Course course;
 
-  ProgressCourseItem({Key? key, required this.coursekey}) : super(key: key);
+  EnrollCourseItem({Key? key, required this.course}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(FullCourse(coursekey: coursekey));
+        Get.to(FullCourse(course: course), binding: UserBinding());
       },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
-            title: StreamBuilder(
-              stream: DBHelper.db
-                  .collection("Course")
-                  .where("key", isEqualTo: coursekey)
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (snapshot.hasData) {
-                  var item = snapshot.data!.docs[0];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.get("name"),
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      )
-                    ],
-                  );
-                }
-                return SizedBox();
-              },
+            leading: Container(
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(20)),
+              clipBehavior: Clip.hardEdge,
+              child: Image.network(
+                course.imageurl ?? defaultCourseThumbnail,
+                height: 60,
+                width: 60,
+                fit: BoxFit.fill,
+              ),
             ),
-            subtitle: StreamBuilder(
-              stream: DBHelper.db
-                  .collection("CourseLesson")
-                  .where("coursekey", isEqualTo: coursekey)
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (snapshot.hasData) {
-                  var arr = snapshot.data!.docs;
-                  return Text(
-                    arr.length.toString() + " lessons",
-                    style: TextStyle(color: Colors.black),
-                  );
-                }
-                return SizedBox();
-              },
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  course.name!,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 5,
+                )
+              ],
             ),
-            leading: StreamBuilder(
-              stream: DBHelper.db
-                  .collection("Course")
-                  .where("key", isEqualTo: coursekey)
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (snapshot.hasData) {
-                  var item = snapshot.data!.docs[0];
-                  return Container(
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                    clipBehavior: Clip.hardEdge,
-                    child: Image.network(
-                      item.get("imageurl"),
-                      height: 60,
-                      width: 60,
-                      fit: BoxFit.fill,
-                    ),
-                  );
-                }
-                return SizedBox();
-              },
-            ),
-            trailing: StreamBuilder(
-              stream: DBHelper.db
-                  .collection("CourseLesson")
-                  .where("coursekey", isEqualTo: coursekey)
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (snapshot.hasData) {
-                  var arr = snapshot.data!.docs;
-                  var totallessons = arr.length;
-                  var lessonkeys = arr.map((e) => e.get("lessonkey")).toList();
-                  return StreamBuilder(
-                    stream: DBHelper.db
-                        .collection("CompletedLessons")
-                        .where("lessonkey", whereIn: lessonkeys)
-                        .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                            snapshot) {
-                      if (snapshot.hasData) {
-                        var completedlist = snapshot.data!.docs.where((e) =>
-                            e.get("userkey") == DBHelper.auth.currentUser!.uid);
-                        var completecount = completedlist.length;
-                        var completedpercentage =
-                            (completecount.toDouble() / totallessons);
-                        return CircularPercentIndicator(
-                          radius: 25,
-                          lineWidth: 5.0,
-                          percent: completedpercentage,
-                          center: Text(
-                            (completedpercentage * 100).toStringAsFixed(0) +
-                                "%",
-                            style: TextStyle(
-                                color: Colors.blue.shade700,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          progressColor: Colors.blue.shade700,
-                        );
-                      }
-                      return CircularPercentIndicator(
-                        radius: 25,
-                        lineWidth: 5.0,
-                        percent: 0,
-                        center: Text(
-                          (0).toStringAsFixed(0) + "%",
-                          style: TextStyle(
-                              color: Colors.blue.shade700,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        progressColor: Colors.blue.shade700,
-                      );
-                    },
-                  );
-                }
-                return SizedBox();
-              },
-            ),
+            // subtitle: Column(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: [
+            //     StreamBuilder(
+            //       stream: DBHelper.db
+            //           .collection("CourseLesson")
+            //           .where("coursekey", isEqualTo: snap.get("key"))
+            //           .snapshots(),
+            //       builder: (BuildContext context,
+            //           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+            //         if (snapshot.hasData) {
+            //           var arr = snapshot.data!.docs;
+            //           return Text(arr.length.toString() + " lessons",style: TextStyle(color: Colors.black),);
+            //         }
+            //         return SizedBox();
+            //       },
+            //     ),
+            //     SizedBox(height: 5,),
+            //     Row(
+            //       mainAxisSize: MainAxisSize.min,
+            //       children: [
+            //         Icon(
+            //           Icons.star,
+            //           color: Colors.orange,
+            //         ),
+            //         SizedBox(width: 3,),
+            //         Expanded(
+            //           child: StreamBuilder(
+            //             stream: DBHelper.db
+            //                 .collection("Rating")
+            //                 .where("coursekey", isEqualTo: snap.get("key"))
+            //                 .snapshots(),
+            //             builder: (BuildContext context,
+            //                 AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+            //                 snapshot) {
+            //               if (snapshot.hasData) {
+            //                 var arr = snapshot.data!.docs;
+            //                 var avg = 0.0;
+            //                 if (arr.length > 0)
+            //                   avg = arr
+            //                       .map((e) =>
+            //                       double.parse(e.get("rating").toString()))
+            //                       .average;
+            //                 return Text(avg.toStringAsFixed(1));
+            //               }
+            //               return SizedBox();
+            //             },
+            //           ),
+            //         )
+            //       ],
+            //     )
+            //   ],
+            // ),
           ),
         ),
       ),

@@ -27,39 +27,43 @@ class ViewNotifications extends StatelessWidget {
             .snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          if (snapshot.hasData) {
-            var arr = snapshot.data!.docs;
-            if (arr.isEmpty) {
-              return const Center(
-                child: Text(
-                  "No Notifications to Show !",
-                  style: TextStyle(fontSize: 20),
-                ),
-              );
-            }
-            return ListView.builder(
-              itemCount: arr.length,
-              itemBuilder: (BuildContext context, int index) {
-                final df = DateFormat('dd-MM-yyyy hh:mm a');
-                var notedate = df.format(
-                    DateTime.fromMicrosecondsSinceEpoch(arr[index].get("key")));
-                return Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.blue.shade700,
-                      child: const Icon(
-                        Icons.check,
-                        color: Colors.white,
-                      ),
-                    ),
-                    title: Text(arr[index].get("text")),
-                    subtitle: Text(notedate),
+          try {
+            if (snapshot.hasData) {
+              var arr = snapshot.data!.docs;
+              if (arr.isEmpty) {
+                return const Center(
+                  child: Text(
+                    "No Notifications to Show !",
+                    style: TextStyle(fontSize: 20),
                   ),
                 );
-              },
-            );
+              }
+              return ListView.builder(
+                itemCount: arr.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final df = DateFormat('dd-MM-yyyy hh:mm a');
+                  var notedate = df.format(DateTime.fromMicrosecondsSinceEpoch(
+                      arr[index].get("key")));
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.blue.shade700,
+                        child: const Icon(
+                          Icons.check,
+                          color: Colors.white,
+                        ),
+                      ),
+                      title: Text(arr[index].get("text")),
+                      subtitle: Text(notedate),
+                    ),
+                  );
+                },
+              );
+            }
+          } catch (e) {
+            print(e);
           }
           return const Center(
             child: CircularProgressIndicator(),

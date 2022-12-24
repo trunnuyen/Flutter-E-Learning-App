@@ -1,6 +1,7 @@
 import 'package:online_learning_app/Controllers/HomeController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_learning_app/public/color.dart';
 
 class SelectionButtonCourse extends StatelessWidget {
   var content = "";
@@ -17,17 +18,18 @@ class SelectionButtonCourse extends StatelessWidget {
     return InkWell(
       onTap: () {
         _controller.selectedCourseButton.value = content;
+        enrollController.getEnroll();
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(15, 8, 15, 8),
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.blue.shade700, width: 2),
-            color: selected ? Colors.blue.shade700 : Colors.white,
+            border: Border.all(color: primary, width: 2),
+            color: selected ? primary : Colors.white,
             borderRadius: BorderRadius.circular(20)),
         child: Text(
           content,
           style: TextStyle(
-              color: selected ? Colors.white : Colors.blue.shade700,
+              color: selected ? Colors.white : primary,
               fontWeight: FontWeight.bold),
         ),
       ),

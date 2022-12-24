@@ -1,31 +1,38 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:online_learning_app/Models/Payment.dart';
 import 'package:online_learning_app/RegisterProcess/Selector.dart';
 import 'package:online_learning_app/Repository/DBHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:online_learning_app/Routes/AppRoutes.dart';
+import 'package:online_learning_app/Widgets/BoxDecoration.dart';
 import 'package:online_learning_app/Widgets/Settingbox.dart';
 import 'package:online_learning_app/Widgets/setting_item.dart';
+import 'package:online_learning_app/main.dart';
 import 'package:online_learning_app/public/color.dart';
 
 import '../Widgets/Icon.dart';
 
 class ProfileView extends GetView {
+  TextEditingController? _textCardNumber, _textFullName;
+  var cardNumber;
+  var fullName;
   @override
   Widget build(BuildContext context) {
+    _textCardNumber;
+    _textFullName;
     return Scaffold(
       appBar: AppBar(
-        leading: online_learning_appIcon(
-          myicon: Icons.library_books,
-          background: Colors.blue.shade700,
-          foreground: Colors.white,
-        ),
         title: const Text(
-          "Profile",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          'Profile',
+          style: TextStyle(
+            color: textColor,
+            fontWeight: FontWeight.w600,
+            fontSize: 24,
+          ),
         ),
         actions: [
           InkWell(
@@ -186,7 +193,11 @@ class ProfileView extends GetView {
                 title: "Payment",
                 leadingIcon: Icons.payment,
                 bgIconColor: green,
-                onTap: () {},
+                onTap: () {
+                  _displayTextInputDialog(
+                    navigatorKey.currentContext!,
+                  );
+                },
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 45),
@@ -282,5 +293,101 @@ class ProfileView extends GetView {
         ],
       ),
     );
+  }
+
+  Future<void> _displayTextInputDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Payment'),
+            content: Column(
+              children: <Widget>[
+                Text('VISA',
+                    style: TextStyle(
+                        color: fCD, fontSize: 18, fontWeight: FontWeight.w700)),
+                const SizedBox(
+                  height: 10,
+                ),
+                StreamBuilder(
+                  stream: DBHelper.db
+                      .collection("Payment")
+                      .where("userkey",
+                          isEqualTo: DBHelper.auth.currentUser!.uid)
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.hasData) {
+                      var arr = snapshot.data!.docs;
+                      if (arr.isNotEmpty) {
+                        return Column(
+                          children: [
+                            TextField(
+                              onChanged: (value) {},
+                              controller: _textCardNumber,
+                              decoration: InputDecoration(
+                                  hintText:
+                                      '${arr.map((e) => e.get("cardNumber").toString())}'),
+                            ),
+                            TextField(
+                              onChanged: (value) {},
+                              controller: _textCardNumber,
+                              decoration: InputDecoration(
+                                  hintText:
+                                      '${arr.map((e) => e.get("fullName").toString())}'),
+                            ),
+                          ],
+                        );
+                      }
+                    }
+                    return Column(
+                      children: [
+                        TextField(
+                          onChanged: (value) {
+                            cardNumber = value;
+                          },
+                          controller: _textCardNumber,
+                          decoration:
+                              const InputDecoration(hintText: "CardNumber"),
+                        ),
+                        TextField(
+                          onChanged: (value) {
+                            fullName = value;
+                          },
+                          controller: _textFullName,
+                          decoration:
+                              const InputDecoration(hintText: "FullName"),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
+            actions: [
+              ElevatedButton(
+                  onPressed: () async {
+                    Get.back();
+                    await DBHelper.db.collection("Payment").add(Payment(
+                          cardNumber: cardNumber,
+                          fullName: fullName,
+                        ).toMap());
+                    Get.snackbar('Payment Added', 'Payment info saved',
+                        icon: const Icon(
+                          Icons.payment,
+                          color: Colors.green,
+                        ),
+                        snackPosition: SnackPosition.BOTTOM);
+                  },
+                  child: const Text("Save")),
+              ElevatedButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Text("Cancel"))
+            ],
+          );
+        });
   }
 }

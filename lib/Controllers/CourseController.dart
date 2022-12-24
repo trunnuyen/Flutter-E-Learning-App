@@ -6,11 +6,12 @@ import 'package:online_learning_app/public/api.dart';
 import 'package:get/get.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
+import 'package:online_learning_app/public/string.dart';
 
 class CourseController extends GetxController {
   var isLoading = false.obs;
 
-  CourseProvider? courseProvider, discountedcourses, courseSearch;
+  CourseProvider? courseProvider, discountedcourses, courseSearch, freeCourse;
   CourseProvider? courseWishlist;
 
   var currentIndex = 0.obs;
@@ -20,6 +21,7 @@ class CourseController extends GetxController {
     super.onInit();
     fetchData();
     fetchDiscountedCourse();
+    fetchFreeCourse();
   }
 
   fetchData() async {
@@ -60,6 +62,27 @@ class CourseController extends GetxController {
       }
     } catch (e) {
       print('Error while getting data is $e');
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  fetchFreeCourse() async {
+    try {
+      isLoading(true);
+      http.Response response = await http.get(Uri.tryParse(
+          '$baseApi/online_learning_api/api/CourseAPI.php?freecourses')!);
+      if (response.statusCode == 200) {
+        ///data successfully
+        var result = jsonDecode(response.body);
+
+        freeCourse = CourseProvider.fromJson(result);
+        print(' fetching data free course');
+      } else {
+        print('error fetching data free course');
+      }
+    } catch (e) {
+      print('Error while getting data free course is $e');
     } finally {
       isLoading(false);
     }

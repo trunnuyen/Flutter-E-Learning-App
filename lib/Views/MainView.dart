@@ -215,7 +215,7 @@ class MainView extends GetView {
                     width: 10,
                   ),
                   Obx(() => SelectionButton(
-                      content: "Newest",
+                      content: "Free",
                       selectedButton: _controller.selectedButton.value,
                       icon: Icons.free_breakfast)),
                 ],
@@ -286,6 +286,7 @@ class MainView extends GetView {
   Future<void> _refresh() {
     courseController.fetchData();
     courseController.fetchDiscountedCourse();
+    courseController.fetchFreeCourse();
     return Future.delayed(const Duration(seconds: 3));
   }
 }

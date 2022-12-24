@@ -1,15 +1,14 @@
-
 import '../Repository/DBHelper.dart';
 
-class Enrolled{
-  String userkey=DBHelper.auth.currentUser!.uid;
-  String coursekey="";
+class Enrolled {
+  String userkey = DBHelper.auth.currentUser!.uid;
+  String? sqlId;
+  String? sqlUserId;
+  String coursekey = "";
 
 //<editor-fold desc="Data Methods">
 
-  Enrolled({
-    required this.coursekey,
-  });
+  Enrolled({required this.coursekey, this.sqlId, this.sqlUserId});
 
   @override
   bool operator ==(Object other) =>
@@ -30,15 +29,6 @@ class Enrolled{
         '}';
   }
 
-  Enrolled copyWith({
-    String? userkey,
-    String? coursekey,
-  }) {
-    return Enrolled(
-      coursekey: coursekey ?? this.coursekey,
-    );
-  }
-
   Map<String, dynamic> toMap() {
     return {
       'userkey': this.userkey,
@@ -46,10 +36,11 @@ class Enrolled{
     };
   }
 
-  factory Enrolled.fromMap(Map<String, dynamic> map) {
+  factory Enrolled.fromJson(Map<String, dynamic> json) {
     return Enrolled(
-      coursekey: map['coursekey'] as String,
-    );
+        coursekey: json['course_id'],
+        sqlId: json['id'],
+        sqlUserId: json['user_id']);
   }
 
 //</editor-fold>

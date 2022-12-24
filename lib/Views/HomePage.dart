@@ -1,24 +1,25 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:online_learning_app/Controllers/CategoryController.dart';
 import 'package:online_learning_app/Controllers/HomeController.dart';
-import 'package:online_learning_app/Controllers/UserController.dart';
 import 'package:online_learning_app/Views/ExploreView.dart';
 import 'package:online_learning_app/Views/MainView.dart';
 import 'package:online_learning_app/Views/MyCourseView.dart';
 import 'package:online_learning_app/Views/ProfileView.dart';
-import 'package:online_learning_app/Views/SearchView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
+import '../main.dart';
+
 class HomePage extends GetView {
   @override
   Widget build(BuildContext context) {
+    FirebaseMessaging.onMessage.listen(firebaseBackgroundMessage);
     PersistentTabController navcontroller;
     navcontroller = PersistentTabController(initialIndex: 0);
     var _controller = Get.put(HomeController());
     CategoryController categoryController = Get.put(CategoryController());
-    UserController usercontroller = Get.put(UserController());
 
     List<Widget> _buildScreens() {
       return [MainView(), ExploreView(), MyCourseView(), ProfileView()];
