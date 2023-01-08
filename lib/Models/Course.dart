@@ -11,20 +11,21 @@ class Course {
   String? discountedPrice = "";
   int? discountedPercent = 0;
   String? videoUrl = "";
+  String? level = "";
 //<editor-fold desc="Data Methods">
 
-  Course({
-    required this.name,
-    required this.desc,
-    required this.price,
-    required this.imageurl,
-    required this.outcomes,
-    required this.dateAdded,
-    required this.requirements,
-    required this.discountedPrice,
-    required this.discountedPercent,
-    required this.videoUrl,
-  });
+  Course(
+      {required this.name,
+      required this.desc,
+      required this.price,
+      required this.imageurl,
+      required this.outcomes,
+      required this.dateAdded,
+      required this.requirements,
+      required this.discountedPrice,
+      required this.discountedPercent,
+      required this.videoUrl,
+      required this.level});
 
   Course.fromJson(Map<String, dynamic> json) {
     key = json["id"];
@@ -38,6 +39,7 @@ class Course {
     discountedPrice = json['discounted_price'];
     discountedPercent = json['discounted_percent'];
     videoUrl = json['video_url'];
+    level = json['level'];
   }
 
   Map<String, dynamic> toJson() {
@@ -52,6 +54,7 @@ class Course {
     _data['discounted_price'] = discountedPrice;
     _data['discounted_percent'] = discountedPercent;
     _data['video_url'] = videoUrl;
+    _data['level'] = level;
     return _data;
   }
 

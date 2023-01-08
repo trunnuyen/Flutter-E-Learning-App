@@ -25,12 +25,12 @@ class LessonController extends GetxController {
         var result = jsonDecode(response.body);
 
         lessonsProvider = LessonsProvider.fromJson(result);
-        print(' fetching data $result');
+        print(' fetching data lesson $result');
       } else {
-        print('error fetching data');
+        print('error fetching data lesson');
       }
     } catch (e) {
-      print('Error while getting data is $e');
+      print('Error while getting data lesson is $e');
     } finally {
       isLoading(false);
     }

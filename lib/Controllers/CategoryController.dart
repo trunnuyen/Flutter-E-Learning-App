@@ -12,6 +12,7 @@ class CategoryController extends GetxController {
   var isLoading = false.obs;
   CategoryProvider? category;
   var currentIndex = 0.obs;
+  var page = 1.obs;
 
   @override
   Future<void> onInit() async {
@@ -30,15 +31,16 @@ class CategoryController extends GetxController {
 
         category = CategoryProvider.fromJson(result);
         await courseController.fetchCourseSearch(
-            categoryId: category!.category![currentIndex.value].id.toString());
+          categoryId: category!.category![currentIndex.value].id.toString(),
+        );
 
         print(category!.category![currentIndex.value].id.toString());
-        print(' fetching data');
+        print(' fetching data category');
       } else {
-        print('error fetching data');
+        print('error fetching data category');
       }
     } catch (e) {
-      print('Error while getting data issd $e');
+      print('Error while getting data category issd $e');
     } finally {
       isLoading(false);
     }

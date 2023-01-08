@@ -28,19 +28,19 @@ class CourseController extends GetxController {
     try {
       isLoading(true);
       http.Response response = await http.get(Uri.tryParse(
-          '$baseApi/online_learning_api/api/CourseAPI.php?allcourses')!);
+          '$baseApi/online_learning_api/api/CourseAPI.php?allcourses&page=1&row_per_page=5')!);
       if (response.statusCode == 200) {
         ///data successfully
         var result = jsonDecode(response.body);
 
         courseProvider = CourseProvider.fromJson(result);
 
-        print(' fetching data');
+        print(' fetching data course');
       } else {
-        print('error fetching data');
+        print('error fetching data course');
       }
     } catch (e) {
-      print('Error while getting data is $e');
+      print('Error while getting data course is $e');
     } finally {
       isLoading(false);
     }
@@ -114,7 +114,7 @@ class CourseController extends GetxController {
     try {
       isLoading(true);
       http.Response response = await http.get(Uri.tryParse(
-          '$baseApi/online_learning_api/api/CourseSearchAPI.php?key=$key&sub_category=$categoryId')!);
+          '$baseApi/online_learning_api/api/CourseSearchAPI.php?key=$key&sub_category=$categoryId&page=1&row_per_page=5')!);
       if (response.statusCode == 200) {
         ///data successfully
         var result = jsonDecode(response.body);

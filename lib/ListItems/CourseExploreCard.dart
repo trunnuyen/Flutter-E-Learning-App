@@ -198,12 +198,12 @@ class CourseExploreCard extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: const [
-                        Icon(Icons.access_time_outlined,
+                      children: [
+                        const Icon(Icons.access_time_outlined,
                             size: 15, color: Colors.grey),
                         Text(
-                          "Lifetime",
-                          style: TextStyle(color: Colors.grey),
+                          course.dateAdded!,
+                          style: const TextStyle(color: Colors.grey),
                         ),
                       ],
                     ),

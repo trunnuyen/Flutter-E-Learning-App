@@ -26,13 +26,13 @@ class EnrollCourseItem extends StatelessWidget {
         Get.to(FullCourse(course: course), binding: UserBinding());
       },
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
           child: ListTile(
             leading: Container(
               decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
               clipBehavior: Clip.hardEdge,
               child: Image.network(
                 course.imageurl ?? defaultCourseThumbnail,

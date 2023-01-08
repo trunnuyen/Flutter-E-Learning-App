@@ -175,6 +175,9 @@ class ExploreView extends GetView {
           autoPlay: false,
           scrollDirection: Axis.vertical,
           enableInfiniteScroll: false,
+          onPageChanged: (index, reason) {
+            if (index == courseController.courseSearch!.courses!.length - 1) {}
+          },
         ),
       );
     });

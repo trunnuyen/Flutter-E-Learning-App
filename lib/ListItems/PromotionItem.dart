@@ -41,7 +41,10 @@ class PromotionItem extends StatelessWidget {
               Text(
                 overflow: TextOverflow.ellipsis,
                 '${course.discountedPercent}%',
-                style: const TextStyle(fontSize: 16, color: Colors.white),
+                style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
             ],
           ),

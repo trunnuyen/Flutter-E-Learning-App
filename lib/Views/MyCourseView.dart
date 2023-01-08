@@ -37,10 +37,12 @@ class MyCourseView extends GetView {
                   ),
                   Row(
                     children: [
-                      Obx(() => SelectionButtonCourse(
-                          content: "All Courses",
-                          selectedButton:
-                              _controller.selectedCourseButton.value)),
+                      Obx(
+                        () => SelectionButtonCourse(
+                            content: "All Courses",
+                            selectedButton:
+                                _controller.selectedCourseButton.value),
+                      ),
                       // const SizedBox(
                       //   width: 10,
                       // ),
@@ -61,8 +63,11 @@ class MyCourseView extends GetView {
                     height: 20,
                   ),
                   Expanded(
-                      child: Obx(() => _controller.getMyCoursesList(
-                          _controller.selectedCourseButton.value)))
+                    child: Obx(
+                      () => _controller.getMyCoursesList(
+                          _controller.selectedCourseButton.value),
+                    ),
+                  ),
                 ],
               ),
             ),

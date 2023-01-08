@@ -146,11 +146,11 @@ class CourseCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
-                      children: const [
-                        Icon(Icons.timelapse, size: 15, color: Colors.grey),
+                      children:  [
+                        const Icon(Icons.timelapse, size: 15, color: Colors.grey),
                         Text(
-                          'Lifetime',
-                          style: TextStyle(color: Colors.grey),
+                          course.dateAdded!,
+                          style: const TextStyle(color: Colors.grey),
                         ),
                       ],
                     ),

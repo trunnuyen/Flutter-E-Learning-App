@@ -183,6 +183,44 @@ class ViewCourse extends GetView {
                         height: 20,
                       ),
                       Align(
+                        alignment: Alignment.topLeft,
+                        child: Row(
+                          children: [
+                            Text(
+                              "Created on: ${course.dateAdded!}",
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: labelColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.leaderboard,
+                              color: Colors.blue.shade700,
+                            ),
+                            Text(
+                              "Level: ${course.level!}",
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: labelColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Align(
                           alignment: Alignment.topLeft,
                           child: Row(
                             children: [
@@ -485,7 +523,8 @@ class ViewCourse extends GetView {
                                     .toList();
                             if (arr.isEmpty && arr2.isEmpty) {
                               return RoundButton(
-                                  text: "Enroll - \$${course.price}",
+                                  text:  "Enroll - \$${course.price}",
+                                     
                                   bacground: Colors.blue.shade600,
                                   foreground: Colors.white,
                                   onPressed: () async {

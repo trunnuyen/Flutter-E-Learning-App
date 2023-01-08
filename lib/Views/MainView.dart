@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_learning_app/Controllers/HomeController.dart';
+import 'package:online_learning_app/ListItems/CourseCard.dart';
+import 'package:online_learning_app/ListItems/CourseExploreCard.dart';
 import 'package:online_learning_app/ListItems/PromotionItem.dart';
 import 'package:online_learning_app/Repository/DBHelper.dart';
 import 'package:online_learning_app/Routes/AppRoutes.dart';
@@ -73,6 +75,18 @@ class MainView extends GetView {
         getTopCourse(),
         const Padding(
           padding: EdgeInsets.fromLTRB(15, 20, 15, 10),
+          child: Text(
+            "Free courses for you",
+            style: TextStyle(
+              color: textColor,
+              fontWeight: FontWeight.w600,
+              fontSize: 22,
+            ),
+          ),
+        ),
+        getFreeCourse(),
+        const Padding(
+          padding: EdgeInsets.fromLTRB(15, 30, 15, 10),
           child: Text(
             "Featured",
             style: TextStyle(
@@ -186,6 +200,33 @@ class MainView extends GetView {
                     course: courseController.discountedcourses!.courses![i]));
           },
           options: CarouselOptions(autoPlay: true));
+    });
+  }
+
+  Widget getFreeCourse() {
+    return Obx(() {
+      if (courseController.isLoading.value) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      if (courseController.freeCourse == null) {
+        return Image.asset("assets/images/notfound.png");
+      }
+      return CarouselSlider(
+        items: List.generate(
+          courseController.freeCourse?.courses?.length ?? 0,
+          (index) => CourseCard(
+            course: courseController.freeCourse!.courses![index],
+          ),
+        ),
+        options: CarouselOptions(
+          height: 290,
+          enlargeCenterPage: true,
+          disableCenter: true,
+          autoPlay: true,
+        ),
+      );
     });
   }
 
